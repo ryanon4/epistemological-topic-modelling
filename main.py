@@ -8,7 +8,7 @@ import numpy as np
 from tqdm import tqdm
 
 # PROVIDE YOUR TEXT DATA HERE
-data = pd.read_csv("../../../all_abstracts.tsv", sep="\t")
+data = pd.read_csv("all_abstracts.tsv", sep="\t")
 
 data["pubdate"] = data["pubdate"].astype(str).str[0:4]
 data = data[pd.to_numeric(data["pubdate"], errors = "coerce").notnull()]
