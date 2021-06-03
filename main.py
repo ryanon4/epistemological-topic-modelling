@@ -1,11 +1,7 @@
 import pandas as pd
 from top2vec import Top2Vec
-import seaborn as sns
-import matplotlib.pyplot as plt
 import umap
-import timeit
-import numpy as np
-from tqdm import tqdm
+import hdbscan
 from functions import scatter_plot
 
 # PROVIDE YOUR TEXT DATA HERE
@@ -33,8 +29,23 @@ model.save("models/top2vec_d2v")
 model = Top2Vec.load("models/top2vec_d2v")
 
 print("Number of Topics Identified:" + str(model.get_num_topics()))
+model.model.init_sims()
+data = model.model.docvecs.vectors_docs
 
-scatter_plot(model.data, model.num_topics, model.cluster, "d2v_master", noise=False, model=model)
+umap_args = {'n_neighbors': 15,
+             'n_components': 5,
+             'metric': 'cosine'}
+
+umap_model = umap.UMAP(**umap_args).fit(model.model.docvecs.vectors_docs)
+
+# find dense areas of document vectors
+
+hdbscan_args = {'min_cluster_size': 15,
+                'metric': 'euclidean',
+                'cluster_selection_method': 'eom'}
+
+cluster = hdbscan.HDBSCAN(**hdbscan_args).fit(umap_model.embedding_)
+scatter_plot(data, model.get_num_topics(), cluster, "d2v_master", noise=False, model=model)
 topic_sizes, topic_nums = model.get_topic_sizes()
 
 topic_words, word_scores, topic_nums = model.get_topics()

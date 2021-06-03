@@ -1,7 +1,7 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pandas as pd
 def scatter_plot(data, num_topics, clusterer, name, noise, model):
     cluster_labels = clusterer.labels_
     doc_labels = model.doc_top
