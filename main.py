@@ -22,7 +22,7 @@ import time
 
 start = time.perf_counter()
 
-model = Top2Vec(documents,speed="fast-learn", workers=8)
+model = Top2Vec(documents,speed="deep-learn", workers=8)
 stop = time.perf_counter()
 print(f"Runtime {start - stop:0.4f} seconds")
 model.save("models/top2vec_d2v")
